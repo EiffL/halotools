@@ -5,6 +5,8 @@ used to map any galaxy property to a halo catalog using a tensorflow model.
 from __future__ import division, print_function, absolute_import
 
 import numpy as np
+from astropy.extern import six
+from abc import ABCMeta
 import tensorflow as tf
 
 __all__ = ('TensorflowGalpropModel',)
@@ -14,13 +16,11 @@ __author__ = ('Francois Lanusse',)
 class TensorflowGalpropModel(object):
     r"""
     Container class for a tensorflow-based galaxy property sampler
-
     """
 
     def __init__(self, model_dir, function_name, seed=None, **kwargs):
         """
         """
-
         # Opens a tensorflow session
         self._sess = tf.Session()
 
@@ -40,6 +40,8 @@ class TensorflowGalpropModel(object):
                             for input_name in self._requested_quantities}
         self._outputs = [self._definition.outputs[output_name].name
                             for output_name in self._generated_quantities]
+
+
 
 
     def _sampler(self, seed=None, batch_size=10000, **kwargs):
@@ -62,7 +64,7 @@ class TensorflowGalpropModel(object):
             outputs[k] = []
 
         # Resets the graph random seed
-        if seed is no None:
+        if seed is not None:
             tf.set_random_seed(seed)
 
         # Create data dictionary
